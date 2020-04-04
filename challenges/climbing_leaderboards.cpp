@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <chrono>
 
 #include <map>
 #include <deque>
@@ -30,8 +31,10 @@ Array slow_climbingLeaderboard(Set &scores, const Array &alice)
 
   auto pos = scores.begin();
   for (auto it = alice.cbegin(); it != alice.cend(); ++it) {
+
     pos = scores.insert(scores.begin(), *it);
 
+    /* std::distance for sets is really slow */
     size_t rank = std::distance(scores.begin(), pos) + 1;
     solution.push_back(rank);
   }
@@ -86,6 +89,7 @@ int main() {
   while (iss >> number)
     /* remove duplicates */
     if (number != prev) {
+      //leaderboard.insert(number);
       leaderboard.push_back(number);
       prev = number;
     }
