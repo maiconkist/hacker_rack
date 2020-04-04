@@ -44,17 +44,7 @@ def gen_output(pcontent: dict ) -> str:
       seq = gen_numbers(ngen, _tup[0], _tup[1])
       output += " ".join([str(n) for n in seq]) + "\n"
 
-  print(output)
   return output
-
-
-
-
-
-
-
-
-
 
 def parse_file(infile: str) -> dict:
   fd = open(infile, "r")
@@ -78,3 +68,6 @@ if __name__ == "__main__":
 
   pcontent = parse_file(options.file)
   output = gen_output(pcontent)
+
+  with open(options.output, "w") as fd:
+    fd.write(output)
