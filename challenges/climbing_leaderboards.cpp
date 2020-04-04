@@ -7,7 +7,7 @@
 #include <iostream>
 #include <sstream>
 
-#include <chrono>
+#include <map>
 #include <deque>
 #include <iterator>
 #include <set>
@@ -23,24 +23,47 @@ typedef deque<int> Deque;
 /* Set custom comparator: decreasing ordering */
 typedef std::set<int, std::greater<int>> Set;
 
-inline size_t find_rank(Set &scores, Set::iterator &it)
-{
-  size_t pos = std::distance(scores.begin(), it);
-  return pos + 1;
-}
 
-Array climbingLeaderboard(Set &scores, const Array &alice)
+Array slow_climbingLeaderboard(Set &scores, const Array &alice)
 {
   Array solution;
 
+  auto pos = scores.begin();
   for (auto it = alice.cbegin(); it != alice.cend(); ++it) {
-    auto pos = scores.insert(*it);
-    size_t rank = std::distance(scores.begin(), pos.first) + 1;
+    pos = scores.insert(scores.begin(), *it);
+
+    size_t rank = std::distance(scores.begin(), pos) + 1;
     solution.push_back(rank);
   }
 
   return std::move(solution);
 }
+
+void print_arr(Array &scores) {
+  for (auto &s: scores)
+    cout << s << ", ";
+  cout << endl;
+}
+
+Array fast_climbingLeaderboard(Array &scores, const Array &alice)
+{
+  Array solution;
+
+#ifdef WITH_DUPLICATES
+   scores.erase(std::unique(scores.begin(), scores.end()), scores.end());
+#endif
+   std::sort(scores.begin(), scores.end());
+
+  auto pos = scores.begin();
+  for (auto it = alice.cbegin(); it != alice.cend(); ++it) {
+    pos = scores.insert(upper_bound(scores.begin(), scores.end(), *it), *it);
+    size_t rank = scores.size() - std::distance(scores.begin(), pos);
+    solution.push_back(rank);
+  }
+
+  return std::move(solution);
+}
+
 
 int main() {
   int number;
@@ -57,19 +80,26 @@ int main() {
   string M_temp;
   getline(cin, M_temp);
 
-  Set leaderboard;
+  Array leaderboard;
   std::stringstream iss(N_temp);
+  int prev = 0;
   while (iss >> number)
-    leaderboard.insert(number);
+    /* remove duplicates */
+    if (number != prev) {
+      leaderboard.push_back(number);
+      prev = number;
+    }
 
   Array alice_scores;
   iss = std::stringstream(M_temp);
   while (iss >> number)
     alice_scores.push_back(number);
 
-  auto &&result = climbingLeaderboard(leaderboard, alice_scores);
+  auto &&result = fast_climbingLeaderboard(leaderboard, alice_scores);
 
+  string output = "";
   for (auto &&i : result)
-      cout << to_string(i) << "\n";
+      output +=  to_string(i) + "\n";
+  cout << output;
   return 0;
 }
