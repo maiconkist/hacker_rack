@@ -1,15 +1,16 @@
-#include <sstream>
+#include <algorithm>
+#include <climits>
 #include <cmath>
 #include <cstdint>
 #include <cstdio>
-#include <iostream>
 #include <fstream>
-#include <algorithm>
-#include <climits>
+#include <iostream>
+#include <sstream>
 
+#include <chrono>
+#include <deque>
 #include <iterator>
 #include <set>
-#include <deque>
 #include <string>
 #include <vector>
 
@@ -20,58 +21,55 @@ typedef vector<string> ArrayStr;
 typedef deque<int> Deque;
 
 /* Set custom comparator: decreasing ordering */
-typedef std::set<int, std::greater<int> > Set;
+typedef std::set<int, std::greater<int>> Set;
 
-size_t find_rank(Set scores, int val)
+inline size_t find_rank(Set &scores, Set::iterator &it)
 {
-  auto it    = std::find(scores.cbegin(), scores.cend(), val);
-  size_t pos = std::distance(scores.cbegin(), it);
-
+  size_t pos = std::distance(scores.begin(), it);
   return pos + 1;
 }
 
-const std::string &  climbingLeaderboard(Set &scores, Deque &alice)
+Array climbingLeaderboard(Set &scores, const Array &alice)
 {
-    static std::string solution;
+  Array solution;
 
-    while (!alice.empty()) {
-        scores.insert(alice[0]);
-        size_t rank = find_rank(scores, alice[0]);
+  for (auto it = alice.cbegin(); it != alice.cend(); ++it) {
+    auto pos = scores.insert(*it);
+    size_t rank = std::distance(scores.begin(), pos.first) + 1;
+    solution.push_back(rank);
+  }
 
-        solution.append(to_string(rank) + "\n");
-        alice.pop_front();
-    }
-
-    return solution;
+  return std::move(solution);
 }
 
-int main()
-{
-    string nl_temp;
-    getline(cin, nl_temp);
+int main() {
+  int number;
 
-    string l_temp;
-    getline(cin, l_temp);
+  string n_temp;
+  getline(cin, n_temp);
 
-    string na_temp;
-    getline(cin, na_temp);
+  string N_temp;
+  getline(cin, N_temp);
 
-    string a_temp;
-    getline(cin, a_temp);
+  string m_temp;
+  getline(cin, m_temp);
 
-    Set leaderboard;
-    int number;
-    std::stringstream iss(l_temp);
-    while (iss >> number)
-      leaderboard.insert(number);
+  string M_temp;
+  getline(cin, M_temp);
 
-    Deque alice_scores;
-    iss = std::stringstream(a_temp);
-    while (iss >> number)
-      alice_scores.push_back(number);
+  Set leaderboard;
+  std::stringstream iss(N_temp);
+  while (iss >> number)
+    leaderboard.insert(number);
 
-    const auto & result = climbingLeaderboard(leaderboard, alice_scores);
-    cout << result;
+  Array alice_scores;
+  iss = std::stringstream(M_temp);
+  while (iss >> number)
+    alice_scores.push_back(number);
 
-    return 0;
+  auto &&result = climbingLeaderboard(leaderboard, alice_scores);
+
+  for (auto &&i : result)
+      cout << to_string(i) << "\n";
+  return 0;
 }
