@@ -8,19 +8,25 @@ typedef vector<int> Vector;
 vector<int> circularArrayRotation(Vector &arrN, int k,
                                   Vector &arrQ)
 {
+#ifndef USE_ALGORITHM
   Vector tmp(arrN.size());
 
   for (int i = 0; i < arrN.size(); i++)
     tmp[(i+k) % arrN.size()] = arrN[i];
 
-#if USE_ALGORITHM
-  k = k % arrN.size();
-  std::rotate(arrN.begin(), arrN.end() - k, arrN.end());
-#endif
-
   Vector result;
   for (auto &q: arrQ)
     result.push_back(tmp[q]);
+#endif
+
+#if USE_ALGORITHM
+  k = k % arrN.size();
+  std::rotate(arrN.begin(), arrN.end() - k, arrN.end());
+
+  Vector result;
+  for (auto &q: arrQ)
+    result.push_back(arrN[q]);
+#endif
 
   return std::move(result);
 }
