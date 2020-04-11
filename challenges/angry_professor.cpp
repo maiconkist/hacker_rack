@@ -14,30 +14,30 @@ string angryProfessor(int k, vector<int> &times)
 
 int main()
 {
-    int t;
-    cin >> t;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+  int t;
+  cin >> t;
+  cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-    for (int t_itr = 0; t_itr < t; t_itr++) {
-        string nk_temp;
-        getline(cin, nk_temp);
+  for (int t_itr = 0; t_itr < t; t_itr++) {
+    string nk_temp;
+    getline(cin, nk_temp);
 
-        std::stringstream iss(nk_temp);
-        int n, k;
-        iss >> n; iss >> k;
+    std::stringstream iss(nk_temp);
+    int n, k;
+    iss >> n; iss >> k;
 
-        string a_temp;
-        getline(cin, a_temp);
+    string a_temp;
+    getline(cin, a_temp);
 
-        vector<int> times;
-        int number;
-        iss = std::stringstream(a_temp);
-        while (iss >> number)
-          times.push_back(number);
+    vector<int> times;
+    int number;
+    iss = std::stringstream(a_temp);
+    while (iss >> number)
+      times.push_back(number);
 
-        string result = angryProfessor(k, times);
-        cout << result << "\n";
-    }
+    string result = angryProfessor(k, times);
+    cout << result << "\n";
+  }
 
-    return 0;
+  return 0;
 }

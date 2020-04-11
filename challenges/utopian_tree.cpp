@@ -15,7 +15,6 @@ size_t utopian_tree(int n)
   return res;
 }
 
-
 int main()
 {
 
