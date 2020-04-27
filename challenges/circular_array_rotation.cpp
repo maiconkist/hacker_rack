@@ -62,4 +62,6 @@ int main()
 
   for (auto &r: result)
     std::cout << r << endl;
+
+  return EXIT_SUCCESS;
 }

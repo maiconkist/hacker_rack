@@ -17,7 +17,6 @@ size_t utopian_tree(int n)
 
 int main()
 {
-
   string n_temp;
   getline(cin, n_temp);
 
