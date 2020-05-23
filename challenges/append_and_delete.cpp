@@ -32,9 +32,7 @@ std::string append_and_delete(std::string &s,
   if ((k - (rm + add)) % 2 == 0) return "Yes";
 
   return "No";
-
 }
-
 
 int main()
 {
@@ -49,4 +47,5 @@ int main()
   auto result = append_and_delete(s, t, k);
 
   std::cout << result << std::endl;
+  return 1;
 }
